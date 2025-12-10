@@ -25,7 +25,14 @@ SECRET_KEY = 'django-insecure-rol-(%)u6&u2ge*hs33$d!lum$+4srm&o%-+qlt2nvb_n0!-k0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'capricornshippingqatar.com',
+    'www.capricornshippingqatar.com',
+    '18.207.167.160',  # Your EC2 Public IP
+    'localhost'
+]
+
+
 
 
 # Application definition

@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'capricornshippingqatar.com',
     'www.capricornshippingqatar.com',
-    '18.207.167.160',  # Your EC2 Public IP
+    '34.197.161.121',  # Your EC2 Public IP
     'localhost'
 ]
 

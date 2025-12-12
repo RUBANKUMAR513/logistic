@@ -40,13 +40,15 @@ ALLOWED_HOSTS = [
 
 INSTALLED_APPS = [
     "jazzmin",
+    'colorfield',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'index',
+    'website',
+    'settings',
 ]
 
 MIDDLEWARE = [
@@ -116,11 +118,15 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
-
 USE_TZ = True
+USE_L10N = False
+
+TIME_FORMAT = 'H:i:s'            # 24-hour time
+DATETIME_FORMAT = 'd-m-Y H:i:s'  # 24-hour datetime
+
 
 
 # Static files (CSS, JavaScript, Images)
@@ -132,6 +138,10 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 
 JAZZMIN_SETTINGS = {
     "site_title": "Logistic Admin",

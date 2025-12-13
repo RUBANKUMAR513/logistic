@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import GalleryImages,Testimonial
+from .models import GalleryImages,Testimonial,ContactPage
 
 
 @admin.register(GalleryImages)
@@ -21,3 +21,17 @@ class TestimonialAdmin(admin.ModelAdmin):
     list_editable = ('enable',)
     search_fields = ('client_name', 'profession')
     list_filter = ('enable', 'last_updated')
+
+
+@admin.register(ContactPage)
+class ContactPageAdmin(admin.ModelAdmin):
+    list_display = ("short_maincontent", "last_updated")
+    fields = ("maincontent", "locationtodisplay")
+
+    def has_add_permission(self, request):
+        return not ContactPage.objects.exists()
+
+    def short_maincontent(self, obj):
+        return obj.maincontent[:40] + "..." if len(obj.maincontent) > 40 else obj.maincontent
+
+    short_maincontent.short_description = "Main Content"

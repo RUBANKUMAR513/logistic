@@ -4,6 +4,7 @@ from PIL import Image
 import os
 from io import BytesIO
 from django.core.files.base import ContentFile
+import re
 
 class GalleryImages(models.Model):
     ORIENTATION_CHOICES = [
@@ -78,3 +79,29 @@ class Testimonial(models.Model):
 
     def __str__(self):
         return self.client_name
+    
+
+class ContactPage(models.Model):
+    maincontent = models.CharField(max_length=200)
+    locationtodisplay = models.TextField(
+        help_text="Paste Google Maps iframe OR only the src URL"
+    )
+    last_updated = models.DateTimeField(auto_now=True)
+
+    def clean(self):
+        # Allow only one instance
+        if not self.pk and ContactPage.objects.exists():
+            raise ValidationError("Only one ContactPage instance is allowed.")
+
+    def save(self, *args, **kwargs):
+        # Extract src if full iframe is pasted
+        if self.locationtodisplay:
+            match = re.search(r'src="([^"]+)"', self.locationtodisplay)
+            if match:
+                self.locationtodisplay = match.group(1)
+
+        self.full_clean()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return "Contact Page Content"

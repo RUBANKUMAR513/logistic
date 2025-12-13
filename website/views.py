@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from settings.models import LogoSettings,ColorSettings,CompanyDetails
-from website.models import GalleryImages,Testimonial
+from website.models import GalleryImages,Testimonial,ContactPage
 
 
 # Helper function to get common context
@@ -67,6 +67,8 @@ def testimonial(request):
 # Contact page
 def contact(request):
     context = get_common_context()
+    contact = ContactPage.objects.first()
+    context['contact'] = contact
     return render(request, "contact.html", context)
 
 # 404 error page

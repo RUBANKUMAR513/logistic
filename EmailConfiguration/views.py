@@ -5,22 +5,37 @@ import json
 from EmailConfiguration.msg import process  # Adjust the import based on your project structure
 
 
-@csrf_exempt  # Use this only if CSRF protection is not needed (not recommended for production)
 def send_otp(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         try:
-            # Parse the JSON data
+            print("message received")
             data = json.loads(request.body)
-            message = data.get('message', '')
 
-            # Check for the specific message to trigger the OTP process
-            if message == 'admin trigger otp':
-                process()  # Call your process function to send the OTP
-                return JsonResponse({'status': 'success', 'message': 'OTP sent successfully.'})
+            name = data.get("name")
+            email = data.get("email")
+            subject = data.get("subject")
+            message = data.get("message")
 
-            return JsonResponse({'status': 'error', 'message': 'Invalid request.'}, status=400)
+            # Example: trigger process
+            process(
+                name=name,
+                email=email,
+                subject=subject,
+                message=message
+            )
 
-        except json.JSONDecodeError:
-            return JsonResponse({'status': 'error', 'message': 'Invalid JSON.'}, status=400)
+            return JsonResponse({
+                "status": "success",
+                "message": "Your message has been sent successfully!"
+            })
 
-    return JsonResponse({'status': 'error', 'message': 'Only POST method is allowed.'}, status=405)
+        except Exception as e:
+            return JsonResponse({
+                "status": "error",
+                "message": str(e)
+            }, status=400)
+
+    return JsonResponse({
+        "status": "error",
+        "message": "Only POST method allowed"
+    }, status=405)

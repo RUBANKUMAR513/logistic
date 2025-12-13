@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('website.urls')),  # Include website app URLs
     path('settings/', include('settings.urls')),  # Include settings app URLs
+    path('email/',include('EmailConfiguration.urls'))
 ]
 
 if settings.DEBUG:

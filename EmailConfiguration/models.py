@@ -85,14 +85,21 @@ def create_default_toemail_instance(sender, **kwargs):
 class ClientMessage(models.Model):
     client_name = models.CharField(max_length=100)
     client_mail = models.EmailField()
-    subject = models.CharField(max_length=255)
+
+    company_name = models.CharField(max_length=150, null=True, blank=True)
+    contact_number = models.CharField(max_length=20, null=True, blank=True)
+
+    # No choices → fully dynamic
+    service_type = models.CharField(max_length=50, null=True, blank=True)
+
     messages = models.TextField()
     receive_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.client_name
+        return f"{self.client_name} - {self.service_type or 'No Service'}"
 
     def save(self, *args, **kwargs):
-        if self.pk:  # If instance already exists (update attempt)
+        if self.pk:
             raise ValidationError("Updating ClientMessage is not allowed.")
         super().save(*args, **kwargs)
+

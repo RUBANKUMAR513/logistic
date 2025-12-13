@@ -5,22 +5,35 @@ import json
 from EmailConfiguration.msg import process  # Adjust the import based on your project structure
 
 
+
 def send_otp(request):
     if request.method == "POST":
         try:
-            print("message received")
+            print("📩 Contact message received")
+
             data = json.loads(request.body)
 
             name = data.get("name")
             email = data.get("email")
-            subject = data.get("subject")
+            company = data.get("company")
+            contact_number = data.get("contact_number")
+            service_type = data.get("service_type")
             message = data.get("message")
 
-            # Example: trigger process
+            # Optional validation
+            if not all([name, email, company, contact_number, service_type, message]):
+                return JsonResponse({
+                    "status": "error",
+                    "message": "All fields are required"
+                }, status=400)
+
+            # Trigger your process (email / save DB / automation)
             process(
                 name=name,
                 email=email,
-                subject=subject,
+                company=company,
+                contact_number=contact_number,
+                service_type=service_type,
                 message=message
             )
 
@@ -28,6 +41,12 @@ def send_otp(request):
                 "status": "success",
                 "message": "Your message has been sent successfully!"
             })
+
+        except json.JSONDecodeError:
+            return JsonResponse({
+                "status": "error",
+                "message": "Invalid JSON data"
+            }, status=400)
 
         except Exception as e:
             return JsonResponse({

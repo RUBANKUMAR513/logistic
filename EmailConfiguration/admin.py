@@ -50,21 +50,36 @@ admin.site.register(ToEmail, ToEmailAdmin)
 
 @admin.register(ClientMessage)
 class ClientMessageAdmin(admin.ModelAdmin):
+
     list_display = (
         "client_name",
         "client_mail",
-        "subject",
+        "company_name",
+        "contact_number",
+        "service_type",
         "receive_time",
     )
 
-    list_filter = ("receive_time",)
-    search_fields = ("client_name", "client_mail", "subject")
+    list_filter = (
+        "service_type",
+        "receive_time",
+    )
+
+    search_fields = (
+        "client_name",
+        "client_mail",
+        "company_name",
+        "contact_number",
+    )
+
     ordering = ("-receive_time",)
 
     readonly_fields = (
         "client_name",
         "client_mail",
-        "subject",
+        "company_name",
+        "contact_number",
+        "service_type",
         "messages",
         "receive_time",
     )
@@ -79,9 +94,7 @@ class ClientMessageAdmin(admin.ModelAdmin):
         """
         ❌ Disable editing existing messages
         """
-        if obj:
-            return False
-        return super().has_change_permission(request, obj)
+        return False
 
     def has_delete_permission(self, request, obj=None):
         """

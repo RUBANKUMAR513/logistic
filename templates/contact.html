@@ -104,9 +104,11 @@
                     <h1 class="mb-4">Contact For Any Query</h1>
                     <p class="mb-4" style="word-break: break-word;padding: 5px;">{{ contact.maincontent}}</p>
                     <div class="bg-light p-4">
-                        <form id="contactForm">
+                     <form id="contactForm">
     {% csrf_token %}
     <div class="row g-3">
+
+        <!-- Name -->
         <div class="col-md-6">
             <div class="form-floating">
                 <input type="text" class="form-control" id="name" placeholder="Your Name" required>
@@ -114,6 +116,7 @@
             </div>
         </div>
 
+        <!-- Email -->
         <div class="col-md-6">
             <div class="form-floating">
                 <input type="email" class="form-control" id="email" placeholder="Your Email" required>
@@ -121,27 +124,58 @@
             </div>
         </div>
 
-        <div class="col-12">
+        <!-- Company Name -->
+        <div class="col-md-6">
             <div class="form-floating">
-                <input type="text" class="form-control" id="subject" placeholder="Subject" required>
-                <label for="subject">Subject</label>
+                <input type="text" class="form-control" id="company" placeholder="Company Name" required>
+                <label for="company">Company Name</label>
             </div>
         </div>
 
+        <!-- Contact Number -->
+        <div class="col-md-6">
+            <div class="form-floating">
+                <input type="tel" class="form-control" id="contact_number"
+                       placeholder="Contact Number"
+                       pattern="[0-9]{10}" required>
+                <label for="contact_number">Contact Number</label>
+            </div>
+        </div>
+
+        <!-- Service Type Dropdown -->
         <div class="col-12">
             <div class="form-floating">
-                <textarea class="form-control" id="message" placeholder="Message" style="height: 100px" required></textarea>
+                <select class="form-select" id="service_type" required>
+                    <option value="" selected disabled>Choose Service</option>
+                    <option value="air_freight">Air Freight</option>
+                    <option value="land_freight">Land Freight</option>
+                    <option value="ocean_freight">Ocean Freight</option>
+                    <option value="train_freight">Train Freight</option>
+                    <option value="warehouse_clearance">Warehouse Clearance</option>
+                </select>
+                <label for="service_type">Type of Service</label>
+            </div>
+        </div>
+
+        <!-- Message -->
+        <div class="col-12">
+            <div class="form-floating">
+                <textarea class="form-control" id="message"
+                          placeholder="Message" style="height: 100px" required></textarea>
                 <label for="message">Message</label>
             </div>
         </div>
 
+        <!-- Submit -->
         <div class="col-12">
             <button class="btn btn-primary w-100 py-3" type="submit">
                 Send Message
             </button>
         </div>
+
     </div>
 </form>
+
 
                     </div>
                 </div>

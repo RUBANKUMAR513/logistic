@@ -3,11 +3,19 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 from colorfield.fields import ColorField
 import re
+from PIL import Image
 
-
+# PNG validator
 def validate_png(file):
     if not file.name.lower().endswith('.png'):
         raise ValidationError("Only PNG files are allowed.")
+
+# Dimension validator
+def validate_logo_dimensions(file):
+    img = Image.open(file)
+    width, height = img.size
+    if width != 1215 or height != 665:
+        raise ValidationError(f"Logo must be 1215x665 pixels. Uploaded image is {width}x{height} pixels.")
 
 class LogoSettings(models.Model):
     company_name = models.CharField(
@@ -18,8 +26,8 @@ class LogoSettings(models.Model):
 
     logo = models.ImageField(
         upload_to='logos/',
-        validators=[validate_png],
-        help_text="Upload your logo (PNG only)"
+        validators=[validate_png, validate_logo_dimensions],  # Added dimension validator
+        help_text="Upload your logo (PNG only, 1215x665 pixels)"
     )
 
     last_updated = models.DateTimeField(auto_now=True)
@@ -32,6 +40,7 @@ class LogoSettings(models.Model):
         return self.company_name or "Site Logo"
 
     def save(self, *args, **kwargs):
+        # Restrict to only one instance
         if not self.pk and LogoSettings.objects.exists():
             raise ValidationError("Only one LogoSettings instance allowed.")
         return super().save(*args, **kwargs)

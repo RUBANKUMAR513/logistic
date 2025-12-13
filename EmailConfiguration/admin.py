@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.core.exceptions import ValidationError
-from .models import Setting, ToEmail
+from .models import Setting, ToEmail ,ClientMessage
 from .forms import SettingForm, ToEmailForm
 
 
@@ -46,3 +46,45 @@ class ToEmailAdmin(admin.ModelAdmin):
 
 
 admin.site.register(ToEmail, ToEmailAdmin)
+
+
+@admin.register(ClientMessage)
+class ClientMessageAdmin(admin.ModelAdmin):
+    list_display = (
+        "client_name",
+        "client_mail",
+        "subject",
+        "receive_time",
+    )
+
+    list_filter = ("receive_time",)
+    search_fields = ("client_name", "client_mail", "subject")
+    ordering = ("-receive_time",)
+
+    readonly_fields = (
+        "client_name",
+        "client_mail",
+        "subject",
+        "messages",
+        "receive_time",
+    )
+
+    def has_add_permission(self, request):
+        """
+        ❌ Disable adding new ClientMessage from admin
+        """
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        """
+        ❌ Disable editing existing messages
+        """
+        if obj:
+            return False
+        return super().has_change_permission(request, obj)
+
+    def has_delete_permission(self, request, obj=None):
+        """
+        ❌ Disable delete for safety
+        """
+        return False

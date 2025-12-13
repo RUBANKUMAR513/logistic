@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from settings.models import LogoSettings,ColorSettings,CompanyDetails
+from website.models import GalleryImages,Testimonial
 
 
 # Helper function to get common context
@@ -31,7 +32,12 @@ def service(request):
 # Gallery page
 def gallery(request):
     context = get_common_context()
+    gallery_images = GalleryImages.objects.filter(enable=True)
+
+    context['gallery_images'] = gallery_images
+    context['testimonials'] = Testimonial.objects.filter(enable=True)
     return render(request, "gallery.html", context)
+
 
 # Pricing page
 def pricing(request):

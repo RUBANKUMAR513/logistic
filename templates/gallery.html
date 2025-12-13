@@ -30,6 +30,95 @@
 
     <!-- Template Stylesheet -->
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <style>
+      /* Page heading */
+.page-heading {
+    text-align: center;
+    margin-top: 100px; /* Space below the header */
+    margin-bottom: 20px;
+    color: #873e23;
+}
+
+/* Gallery styling */
+.gallery {
+    display: grid;
+    grid-gap: 10px; /* Space between images */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
+    grid-auto-rows: 200px; /* Default row height */
+    grid-auto-flow: dense; /* Fill empty space efficiently */
+    margin: 30px;
+    position: relative; /* Position relative for absolute child positioning */
+}
+
+/* Image container */
+.image-container {
+    position: relative; /* Required for overlay positioning */
+    overflow: hidden; /* Prevent overflow */
+    border-radius: 5px; /* Rounded corners for the container */
+}
+
+.image-container:hover {
+    border: 5px solid #FF3E41; /* Highlight border on hover */
+}
+
+/* Overlay styling */
+.overlay {
+    position: absolute; /* Position it absolutely within the container */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Dark background with transparency */
+    color: white;
+    padding: 10px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    transform: translateY(100%); /* Initially hide the overlay */
+    transition: transform 0.3s ease; /* Smooth transition for visibility */
+}
+
+/* Show overlay on hover */
+.image-container:hover .overlay {
+    transform: translateY(0); /* Slide overlay into view */
+}
+
+/* Image styling */
+.gallery > div > img {
+    width: 100%; /* Full width of the container */
+    height: 100%; /* Full height of the container */
+    object-fit: cover; /* Cover to fill container while maintaining aspect ratio */
+    border-radius: 5px; /* Rounded corners for images */
+    transition: transform 0.3s ease; /* Scale effect on hover */
+}
+
+/* Image scale on hover */
+.image-container:hover img {
+    transform: scale(1.05); /* Slightly enlarge image on hover */
+}
+
+/* Tall images */
+.gallery .tall {
+    grid-row: span 2; /* Span 2 rows for tall images */
+}
+.testimonial-item p {
+    word-break: break-word;
+}
+.testimonial-carousel .owl-dots {
+    display: block !important;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.testimonial-carousel .owl-dot span {
+    width: 12px;
+    height: 12px;
+    background: #FF3E41;
+}
+
+
+
+    </style>
+    
 </head>
 
 <body>
@@ -82,12 +171,12 @@
     <!-- Page Header Start -->
     <div class="container-fluid page-header py-5" style="margin-bottom: 6rem;">
         <div class="container py-5">
-            <h1 class="display-3 text-white mb-3 animated slideInDown">Services</h1>
+            <h1 class="display-3 text-white mb-3 animated slideInDown">Gallery</h1>
             <nav aria-label="breadcrumb animated slideInDown">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a class="text-white" href="#">Home</a></li>
                     <li class="breadcrumb-item"><a class="text-white" href="#">Pages</a></li>
-                    <li class="breadcrumb-item text-white active" aria-current="page">Services</li>
+                    <li class="breadcrumb-item text-white active" aria-current="page">Gallery</li>
                 </ol>
             </nav>
         </div>
@@ -96,7 +185,7 @@
 
 
     <!-- Service Start -->
-    <div class="container-xxl py-5">
+    <!-- <div class="container-xxl py-5">
         <div class="container py-5">
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
                 <h6 class="text-secondary text-uppercase">Our Services</h6>
@@ -165,10 +254,26 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- Service End -->
-
-
+       <div class="text-center">
+       <h6 class="text-secondary text-uppercase">Gallery</h6>
+        <h1 class="mb-0">Our works!</h1>
+        </div>
+        {% load static %}
+        <div class="gallery">
+            {% if gallery_images.exists %}  <!-- Check if any images exist -->
+                {% for image in gallery_images %}
+                    <div class="image-container {% if image.orientation == 'portrait' %}tall{% endif %}">
+                        <img class="galleryimg" src="{{ image.image.url }}" alt="{{ image.name }}" loading="lazy">
+                        <div class="overlay">{{ image.name }}</div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p style="text-align: center;">No gallery images available.</p>
+            {% endif %}
+        </div>
+        
     <!-- Testimonial Start -->
     <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
         <div class="container py-5">
@@ -177,50 +282,22 @@
                 <h1 class="mb-0">Our Clients Say!</h1>
             </div>
             <div class="owl-carousel testimonial-carousel wow fadeInUp" data-wow-delay="0.1s">
+                {% for testimonial in testimonials %}
                 <div class="testimonial-item p-4 my-5">
-                    <i class="fa fa-quote-right fa-3x text-light position-absolute top-0 end-0 mt-n3 me-4"></i>
-                    <div class="d-flex align-items-end mb-4">
-                        <img class="img-fluid flex-shrink-0" src="{% static 'img/testimonial-1.jpg' %}" style="width: 80px; height: 80px;">
-                        <div class="ms-4">
-                            <h5 class="mb-1">Client Name</h5>
-                            <p class="m-0">Profession</p>
+                <i class="fa fa-quote-right fa-3x text-light position-absolute top-0 end-0 mt-n3 me-4"></i>
+
+                <div class="d-flex align-items-end mb-4">
+                   <img class="img-fluid flex-shrink-0"src="{{ testimonial.client_picture.url }}"style="width: 80px; height: 80px;"alt="{{ testimonial.client_name }}">
+                       <div class="ms-4">
+                            <h5 class="mb-1">{{ testimonial.client_name }}</h5>
+                            <p class="m-0">{{ testimonial.profession }}</p>
                         </div>
-                    </div>
-                    <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
                 </div>
-                <div class="testimonial-item p-4 my-5">
-                    <i class="fa fa-quote-right fa-3x text-light position-absolute top-0 end-0 mt-n3 me-4"></i>
-                    <div class="d-flex align-items-end mb-4">
-                        <img class="img-fluid flex-shrink-0" src="{% static 'img/testimonial-2.jpg' %}" style="width: 80px; height: 80px;">
-                        <div class="ms-4">
-                            <h5 class="mb-1">Client Name</h5>
-                            <p class="m-0">Profession</p>
-                        </div>
-                    </div>
-                    <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
+
+                    <p class="mb-0">{{ testimonial.description }}</p>
                 </div>
-                <div class="testimonial-item p-4 my-5">
-                    <i class="fa fa-quote-right fa-3x text-light position-absolute top-0 end-0 mt-n3 me-4"></i>
-                    <div class="d-flex align-items-end mb-4">
-                        <img class="img-fluid flex-shrink-0" src="{% static 'img/testimonial-3.jpg' %}" style="width: 80px; height: 80px;">
-                        <div class="ms-4">
-                            <h5 class="mb-1">Client Name</h5>
-                            <p class="m-0">Profession</p>
-                        </div>
-                    </div>
-                    <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
-                </div>
-                <div class="testimonial-item p-4 my-5">
-                    <i class="fa fa-quote-right fa-3x text-light position-absolute top-0 end-0 mt-n3 me-4"></i>
-                    <div class="d-flex align-items-end mb-4">
-                        <img class="img-fluid flex-shrink-0" src="{% static 'img/testimonial-4.jpg' %}" style="width: 80px; height: 80px;">
-                        <div class="ms-4">
-                            <h5 class="mb-1">Client Name</h5>
-                            <p class="m-0">Profession</p>
-                        </div>
-                    </div>
-                    <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
-                </div>
+                {% endfor %}
+
             </div>
         </div>
     </div>

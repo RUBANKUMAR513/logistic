@@ -88,6 +88,7 @@ def service_detail(request, service_id):
   
 
     context = get_common_context()
+    context['testimonials'] = Testimonial.objects.filter(enable=True)
     context.update({
         "service": service,
        

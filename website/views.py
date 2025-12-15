@@ -1,17 +1,19 @@
 from django.shortcuts import render
 from settings.models import LogoSettings,ColorSettings,CompanyDetails
-from website.models import GalleryImages,Testimonial,ContactPage
+from website.models import GalleryImages,Testimonial,ContactPage,TypesOfService
+from django.shortcuts import render, get_object_or_404
 
-
-# Helper function to get common context
 def get_common_context():
     logo_settings = LogoSettings.objects.first()
     company = CompanyDetails.objects.first()
     colors = ColorSettings.objects.first()
+    nav_services = TypesOfService.objects.filter(is_active=True)
+
     return {
         "logo_settings": logo_settings,
         "company": company,
         "colors": colors,
+        "nav_services": nav_services,  # ✅ Added
     }
 
 # Home page
@@ -76,3 +78,19 @@ def error_404(request, exception):
     context = get_common_context()
     return render(request, "404.html", context)
 
+def service_detail(request, service_id):
+    service = get_object_or_404(
+        TypesOfService,
+        id=service_id,
+        is_active=True
+    )
+
+  
+
+    context = get_common_context()
+    context.update({
+        "service": service,
+       
+    })
+
+    return render(request, "service-content.html", context)

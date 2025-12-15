@@ -105,3 +105,49 @@ class ContactPage(models.Model):
 
     def __str__(self):
         return "Contact Page Content"
+    
+
+class TypesOfService(models.Model):
+    service_name = models.CharField(
+        max_length=30,
+        unique=True,
+        help_text="Enter service name"
+    )
+    description = models.TextField(
+        max_length=100,
+        
+        help_text="Short description about the service"
+    )
+    is_active = models.BooleanField(
+        default=True,
+        help_text="Enable or disable this service"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.service_name
+    
+
+
+class ServiceContent(models.Model):
+    service = models.OneToOneField(
+        TypesOfService,
+        on_delete=models.CASCADE,
+        related_name='content'
+    )
+
+    description_1 = models.TextField(null=True)
+    description_2 = models.TextField(null=True)
+    description_3 = models.TextField(null=True)
+    description_4 = models.TextField(null=True)
+
+    image_1 = models.ImageField(upload_to='services/', blank=True, null=True)
+    image_2 = models.ImageField(upload_to='services/', blank=True, null=True)
+    image_3 = models.ImageField(upload_to='services/', blank=True, null=True)
+    image_4 = models.ImageField(upload_to='services/', blank=True, null=True)
+
+    last_updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.service.service_name} Content"

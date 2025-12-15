@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import GalleryImages,Testimonial,ContactPage
+from .models import GalleryImages,Testimonial,ContactPage,TypesOfService,ServiceContent
 
 
 @admin.register(GalleryImages)
@@ -35,3 +35,18 @@ class ContactPageAdmin(admin.ModelAdmin):
         return obj.maincontent[:40] + "..." if len(obj.maincontent) > 40 else obj.maincontent
 
     short_maincontent.short_description = "Main Content"
+
+
+class ServiceContentInline(admin.StackedInline):
+    model = ServiceContent
+    extra = 0
+
+
+@admin.register(TypesOfService)
+class TypesOfServiceAdminPanel(admin.ModelAdmin):
+    inlines = [ServiceContentInline]
+    list_display = ('service_name', 'is_active', 'created_at')
+    list_filter = ('is_active',)
+    search_fields = ('service_name',)
+    ordering = ('-created_at',)
+    list_editable = ('is_active',)

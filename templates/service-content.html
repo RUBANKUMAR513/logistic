@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>{{ logo_settings.company_name|default:"Capricon" }} - Contacts</title>
+    <title>{{ logo_settings.company_name|default:"Capricon" }} - Services</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -30,6 +30,67 @@
 
     <!-- Template Stylesheet -->
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <style>
+.service-content {
+    padding: 60px;
+}
+
+.service-content img {
+    width: 260px;
+    border-radius: 12px;
+    margin: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-content img:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+.img-left {
+    float: left;
+    margin-left: 0;
+}
+
+.img-right {
+    float: right;
+    margin-right: 0;
+}
+
+.service-content p {
+    text-align: justify;
+    line-height: 1.8;
+    font-size: 16px;
+    color: #444;
+    margin-bottom: 30px;
+}
+
+.service-heading {
+    font-size: 26px;
+    color: #222;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-weight: 600;
+    text-align: center; /* Centers the heading */
+}
+.custom-padding {
+    padding-top: 0px;   /* top padding */
+    padding-bottom: 60px; /* bottom padding */
+}
+/* Mobile */
+@media (max-width: 768px) {
+    .service-content img {
+        float: none;
+        display: block;
+        margin: 20px auto;
+        width: 90%;
+    }
+}
+
+
+
+    </style>
 </head>
 
 <body>
@@ -44,7 +105,7 @@
 
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-white navbar-light shadow border-top border-5 border-primary sticky-top p-0">
-        <a href="/" class="navbar-brand bg-primary d-flex align-items-center px-4 px-lg-5">
+       <a href="/" class="navbar-brand bg-primary d-flex align-items-center px-4 px-lg-5">
     {% if logo_settings and logo_settings.logo %}
         <img src="{{ logo_settings.logo.url }}" alt="" style="height:50px;">
     {% else %}
@@ -62,7 +123,7 @@
 
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Services</a>
-                     <div class="dropdown-menu fade-up m-0">
+                    <div class="dropdown-menu fade-up m-0">
                         {% for service in nav_services %}
                             <a href="{% url 'service_detail' service.id %}" class="dropdown-item">{{ service.service_name }}</a>
                             {% empty %}
@@ -70,6 +131,7 @@
                         {% endfor %}
                     </div>
                 </div>
+            
                 <a href="{% url 'contact' %}" class="nav-item nav-link {% if request.path == '/contact/' %}active{% endif %}">contact</a>
             </div>
             <h4 class="m-0 pe-lg-5 d-none d-lg-block"><i class="fa fa-headphones text-primary me-3"></i>{{ company.contact_number}}</h4>
@@ -81,12 +143,12 @@
     <!-- Page Header Start -->
     <div class="container-fluid page-header py-5" style="margin-bottom: 6rem;">
         <div class="container py-5">
-            <h1 class="display-3 text-white mb-3 animated slideInDown">Contact Us</h1>
+            <h1 class="display-3 text-white mb-3 animated slideInDown">Services</h1>
             <nav aria-label="breadcrumb animated slideInDown">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a class="text-white" href="#">Home</a></li>
                     <li class="breadcrumb-item"><a class="text-white" href="#">Pages</a></li>
-                    <li class="breadcrumb-item text-white active" aria-current="page">Contact</li>
+                    <li class="breadcrumb-item text-white active" aria-current="page">Services</li>
                 </ol>
             </nav>
         </div>
@@ -94,109 +156,109 @@
     <!-- Page Header End -->
 
 
-    <!-- Contact Start -->
-    <div class="container-fluid overflow-hidden py-5 px-lg-0">
-        <div class="container contact-page py-5 px-lg-0">
-            <div class="row g-5 mx-lg-0">
-                <div class="col-md-6 contact-form wow fadeIn" data-wow-delay="0.1s">
-                    <h6 class="text-secondary text-uppercase">Get In Touch</h6>
-                    <h1 class="mb-4">Contact For Any Query</h1>
-                    <p class="mb-4" style="word-break: break-word;padding: 5px;">{{ contact.maincontent}}</p>
-                    <div class="bg-light p-4">
-                     <form id="contactForm">
-    {% csrf_token %}
-    <div class="row g-3">
+    <!-- Service Start -->
+    <div class="service-detail-container">
+  
+    <div class="text-center">
+                <h6 class="text-secondary text-uppercase">Services</h6>
+                <h1 class="mb-0">{{ service.service_name }}</h1>
+    </div>
+    <div class="service-content">
 
-        <!-- Name -->
-        <div class="col-md-6">
-            <div class="form-floating">
-                <input type="text" class="form-control" id="name" placeholder="Your Name" required>
-                <label for="name">Your Name</label>
-            </div>
-        </div>
+        {% if service.content.image_1 %}
+            <img src="{{ service.content.image_1.url }}" class="img-left">
+        {% endif %}
+        <p class="m-0">{{ service.content.description_1 }}</p>
 
-        <!-- Email -->
-        <div class="col-md-6">
-            <div class="form-floating">
-                <input type="email" class="form-control" id="email" placeholder="Your Email" required>
-                <label for="email">Your Email</label>
-            </div>
-        </div>
+        {% if service.content.image_2 %}
+            <img src="{{ service.content.image_2.url }}" class="img-right">
+        {% endif %}
+        <p class="m-0">{{ service.content.description_2 }}</p>
 
-        <!-- Company Name -->
-        <div class="col-md-6">
-            <div class="form-floating">
-                <input type="text" class="form-control" id="company" placeholder="Company Name" required>
-                <label for="company">Company Name</label>
-            </div>
-        </div>
-
-        <!-- Contact Number -->
-        <div class="col-md-6">
-            <div class="form-floating">
-                <input type="tel" class="form-control" id="contact_number"
-                       placeholder="Contact Number"
-                       pattern="[0-9]{10}" required>
-                <label for="contact_number">Contact Number</label>
-            </div>
-        </div>
-
-        <!-- Service Type Dropdown -->
-        <div class="col-12">
-            <div class="form-floating">
-                <select class="form-select" id="service_type" required>
-                    <option value="" selected disabled>Choose Service</option>
-                    <option value="air_freight">Air Freight</option>
-                    <option value="land_freight">Land Freight</option>
-                    <option value="ocean_freight">Ocean Freight</option>
-                    <option value="train_freight">Train Freight</option>
-                    <option value="warehouse_clearance">Warehouse Clearance</option>
-                </select>
-                <label for="service_type">Type of Service</label>
-            </div>
-        </div>
-
-        <!-- Message -->
-        <div class="col-12">
-            <div class="form-floating">
-                <textarea class="form-control" id="message"
-                          placeholder="Message" style="height: 100px" required></textarea>
-                <label for="message">Message</label>
-            </div>
-        </div>
-
-        <!-- Submit -->
-        <div class="col-12">
-            <button class="btn btn-primary w-100 py-3" type="submit">
-                Send Message
-            </button>
-        </div>
+        {% if service.content.image_3 %}
+            <img src="{{ service.content.image_3.url }}" class="img-left">
+        {% endif %}
+        <p class="m-0">{{ service.content.description_3 }}</p>
+        {% if service.content.image_4 %}
+            <img src="{{ service.content.image_4.url }}" class="img-right">
+        {% endif %}
+        <p class="m-0">{{ service.content.description_4 }}</p>
 
     </div>
-</form>
+
+</div>
 
 
+
+
+        </div>
+    </div>
+    <!-- Service End -->
+
+
+    <!-- Testimonial Start -->
+    <div class="container-xxl custom-padding wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container py-5" >
+            <div class="text-center">
+                <h6 class="text-secondary text-uppercase">Testimonial</h6>
+                <h1 class="mb-0">Our Clients Say!</h1>
+            </div>
+            <div class="owl-carousel testimonial-carousel wow fadeInUp" data-wow-delay="0.1s">
+                <div class="testimonial-item p-4 my-5">
+                    <i class="fa fa-quote-right fa-3x text-light position-absolute top-0 end-0 mt-n3 me-4"></i>
+                    <div class="d-flex align-items-end mb-4">
+                        <img class="img-fluid flex-shrink-0" src="{% static 'img/testimonial-1.jpg' %}" style="width: 80px; height: 80px;">
+                        <div class="ms-4">
+                            <h5 class="mb-1">Client Name</h5>
+                            <p class="m-0">Profession</p>
+                        </div>
                     </div>
+                    <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
                 </div>
-                <div class="col-md-6 pe-lg-0 wow fadeInRight" data-wow-delay="0.1s">
-                    <div class="position-relative h-100">
-                        <iframe class="position-absolute w-100 h-100" style="object-fit: cover;"
-                        src="{{ contact.locationtodisplay }}"
-                        frameborder="0" allowfullscreen="" aria-hidden="false"
-                        tabindex="0"></iframe>
+                <div class="testimonial-item p-4 my-5">
+                    <i class="fa fa-quote-right fa-3x text-light position-absolute top-0 end-0 mt-n3 me-4"></i>
+                    <div class="d-flex align-items-end mb-4">
+                        <img class="img-fluid flex-shrink-0" src="{% static 'img/testimonial-2.jpg' %}" style="width: 80px; height: 80px;">
+                        <div class="ms-4">
+                            <h5 class="mb-1">Client Name</h5>
+                            <p class="m-0">Profession</p>
+                        </div>
                     </div>
+                    <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
+                </div>
+                <div class="testimonial-item p-4 my-5">
+                    <i class="fa fa-quote-right fa-3x text-light position-absolute top-0 end-0 mt-n3 me-4"></i>
+                    <div class="d-flex align-items-end mb-4">
+                        <img class="img-fluid flex-shrink-0" src="{% static 'img/testimonial-3.jpg' %}" style="width: 80px; height: 80px;">
+                        <div class="ms-4">
+                            <h5 class="mb-1">Client Name</h5>
+                            <p class="m-0">Profession</p>
+                        </div>
+                    </div>
+                    <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
+                </div>
+                <div class="testimonial-item p-4 my-5">
+                    <i class="fa fa-quote-right fa-3x text-light position-absolute top-0 end-0 mt-n3 me-4"></i>
+                    <div class="d-flex align-items-end mb-4">
+                        <img class="img-fluid flex-shrink-0" src="{% static 'img/testimonial-4.jpg' %}" style="width: 80px; height: 80px;">
+                        <div class="ms-4">
+                            <h5 class="mb-1">Client Name</h5>
+                            <p class="m-0">Profession</p>
+                        </div>
+                    </div>
+                    <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Contact End -->
+    <!-- Testimonial End -->
 
 
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-light footer pt-5 wow fadeIn" data-wow-delay="0.1s" style="margin-top: 6rem;">
         <div class="container py-5">
             <div class="row g-5">
-                 <div class="col-lg-3 col-md-6" style="width: auto;">
+               <div class="col-lg-3 col-md-6" style="width: auto;">
                     <h4 class="text-light mb-4">Address</h4>
                     <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>{{ company.address}}</p>
                     <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>{{ company.contact_number}}</p>
@@ -265,7 +327,8 @@
     <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-0 back-to-top"><i class="bi bi-arrow-up"></i></a>
 
 
-    <!-- JavaScript Libraries -->
+      
+      <!-- JavaScript Libraries -->
    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
    <script src="{% static 'lib/wow/wow.min.js' %}"></script> 
@@ -274,9 +337,7 @@
    <script src="{% static 'lib/counterup/counterup.min.js' %}"></script> 
    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
     <!-- Template Javascript --> 
-     <script src="{% static 'js/main.js' %}"></script>
-     <script src="{% static 'js/mail.js' %}"></script>
-
+   <script src="{% static 'js/main.js' %}"></script>
 </body>
 
 </html>

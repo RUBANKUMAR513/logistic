@@ -84,6 +84,7 @@ class Testimonial(models.Model):
 
 class ContactPage(models.Model):
     maincontent = models.CharField(max_length=200)
+    
     locationtodisplay = models.TextField(
         help_text="Paste Google Maps iframe OR only the src URL"
     )
@@ -129,7 +130,13 @@ class TypesOfService(models.Model):
     def __str__(self):
         return self.service_name
     
-
+def validate_1920_1080(image):
+    img = Image.open(image)
+    width, height = img.size
+    if width != 1920 or height != 1080:
+        raise ValidationError(
+            "Page header image must be exactly 1920 x 1080 pixels."
+        )
 
 class ServiceContent(models.Model):
     service = models.OneToOneField(
@@ -137,11 +144,21 @@ class ServiceContent(models.Model):
         on_delete=models.CASCADE,
         related_name='content'
     )
+    
+    # NEW FIELD
+    page_header_image = models.ImageField(
+        upload_to='services/headers/',
+        validators=[validate_1920_1080],
+        blank=True,
+        null=True,
+        help_text="Upload service page header image (Exact size: 1920 x 1080)"
+    )
 
     description_1 = models.TextField(null=True)
     description_2 = models.TextField(null=True)
     description_3 = models.TextField(null=True)
     description_4 = models.TextField(null=True)
+    
 
     image_1 = models.ImageField(upload_to='services/', blank=True, null=True)
     image_2 = models.ImageField(upload_to='services/', blank=True, null=True)
@@ -372,3 +389,71 @@ class AboutUs(models.Model):
 
     def __str__(self):
         return "About Us Section"
+
+
+
+
+def validate_1920_1080(image):
+    img = Image.open(image)
+    width, height = img.size
+    if width != 1920 or height != 1080:
+        raise ValidationError(
+            "Image must be exactly 1920 x 1080 pixels."
+        )
+
+
+
+class NavbarPageImages(models.Model):
+
+    about_page_image = models.ImageField(
+        upload_to='navbar/',
+        validators=[validate_1920_1080],
+        help_text="Upload About page banner image (Exact size: 1920 x 1080)",
+        null=True,
+        blank=True
+    )
+    about_page_description = models.TextField(
+        null=True,
+        blank=True,
+        help_text="Optional description for About page banner"
+    )
+
+    gallery_page_image = models.ImageField(
+        upload_to='navbar/',
+        validators=[validate_1920_1080],
+        help_text="Upload Gallery page banner image (Exact size: 1920 x 1080)",
+        null=True,
+        blank=True
+    )
+    gallery_page_description = models.TextField(
+        null=True,
+        blank=True,
+        help_text="Optional description for Gallery page banner"
+    )
+
+    contact_page_image = models.ImageField(
+        upload_to='navbar/',
+        validators=[validate_1920_1080],
+        help_text="Upload Contact page banner image (Exact size: 1920 x 1080)",
+        null=True,
+        blank=True
+    )
+    contact_page_description = models.TextField(
+        null=True,
+        blank=True,
+        help_text="Optional description for Contact page banner"
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def clean(self):
+        if not self.pk and NavbarPageImages.objects.exists():
+            raise ValidationError("Only one Navbar Page Images instance is allowed.")
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return "Navbar Page Images"

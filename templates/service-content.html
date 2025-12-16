@@ -33,6 +33,7 @@
     <style>
 .service-content {
     padding: 60px;
+    
 }
 
 .service-content img {
@@ -48,14 +49,20 @@
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
 }
 
+.service-block {
+    margin-bottom: 2rem; /* Adjust as needed */
+}
+
 .img-left {
     float: left;
-    margin-left: 0;
+    margin-right: 1rem;
+    margin-bottom: 1rem; /* optional extra spacing */
 }
 
 .img-right {
     float: right;
-    margin-right: 0;
+    margin-left: 1rem;
+    margin-bottom: 1rem; /* optional extra spacing */
 }
 
 .service-content p {
@@ -154,18 +161,40 @@
 
 
     <!-- Page Header Start -->
-    <div class="container-fluid page-header py-5" style="margin-bottom: 6rem;">
-        <div class="container py-5">
-            <h1 class="display-3 text-white mb-3 animated slideInDown">Services</h1>
-            <nav aria-label="breadcrumb animated slideInDown">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a class="text-white" href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a class="text-white" href="#">Pages</a></li>
-                    <li class="breadcrumb-item text-white active" aria-current="page">Services</li>
-                </ol>
-            </nav>
-        </div>
+{% if service_content and service_content.page_header_image %}
+<div class="container-fluid page-header py-5"
+     style="
+        margin-bottom: 6rem;
+        background:
+        linear-gradient(rgba(6, 3, 21, .5), rgba(6, 3, 21, .5)),
+        url('{{ service_content.page_header_image.url }}') center center no-repeat;
+        background-size: cover;
+     ">
+{% else %}
+<div class="container-fluid page-header py-5"
+     style="margin-bottom: 6rem;">
+{% endif %}
+    <div class="container py-5">
+        <h1 class="display-3 text-white mb-3 animated slideInDown">
+            Services
+        </h1>
+
+        <nav aria-label="breadcrumb animated slideInDown">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a class="text-white" href="{% url 'home' %}">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a class="text-white" href="#">Pages</a>
+                </li>
+                <li class="breadcrumb-item text-white active" aria-current="page">
+                    Services
+                </li>
+            </ol>
+        </nav>
     </div>
+</div>
+
     <!-- Page Header End -->
 
 
@@ -177,25 +206,34 @@
                 <h1 class="mb-0">{{ service.service_name }}</h1>
     </div>
     <div class="service-content">
-
-        {% if service.content.image_1 %}
+     <div class="service-block mb-4">
+         {% if service.content.image_1 %}
             <img src="{{ service.content.image_1.url }}" class="img-left">
         {% endif %}
         <p class="m-0">{{ service.content.description_1 }}</p>
-
-        {% if service.content.image_2 %}
+     </div>
+       
+<div class="service-block mb-4">
+{% if service.content.image_2 %}
             <img src="{{ service.content.image_2.url }}" class="img-right">
         {% endif %}
         <p class="m-0">{{ service.content.description_2 }}</p>
-
-        {% if service.content.image_3 %}
+</div>
+        
+<div class="service-block mb-4">
+{% if service.content.image_3 %}
             <img src="{{ service.content.image_3.url }}" class="img-left">
         {% endif %}
         <p class="m-0">{{ service.content.description_3 }}</p>
-        {% if service.content.image_4 %}
+</div>
+        
+        <div class="service-block mb-4">
+{% if service.content.image_4 %}
             <img src="{{ service.content.image_4.url }}" class="img-right">
         {% endif %}
         <p class="m-0">{{ service.content.description_4 }}</p>
+        </div>
+        
 
     </div>
 
@@ -240,14 +278,36 @@
 
 
     <!-- Footer Start -->
+        <!-- Footer Start -->
     <div class="container-fluid bg-dark text-light footer pt-5 wow fadeIn" data-wow-delay="0.1s" style="margin-top: 6rem;">
         <div class="container py-5">
             <div class="row g-5">
-               <div class="col-lg-3 col-md-6" style="width: auto;">
+                <div class="col-lg-3 col-md-6" style="width: auto;">
                     <h4 class="text-light mb-4">Address</h4>
-                    <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>{{ company.address}}</p>
-                    <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>{{ company.contact_number}}</p>
-                    <p class="mb-2"><i class="fa fa-envelope me-3"></i>{{ company.email}}</p>
+                    <p class="mb-2">
+    <i class="fa fa-map-marker-alt me-3"></i>
+    <a
+        href="https://www.google.com/maps/search/?api=1&query={{ company.address|urlencode }}"
+        target="_blank"
+        class="text-light text-decoration-none"
+    >
+        {{ company.address }}
+    </a>
+</p>
+
+                    <p class="mb-2">
+    <i class="fa fa-phone-alt me-3"></i>
+    <a href="tel:{{ company.contact_number }}" class="text-light text-decoration-none">
+        {{ company.contact_number }}
+    </a>
+</p>
+                    <p class="mb-2">
+    <i class="fa fa-envelope me-3"></i>
+    <a href="mailto:{{ company.email }}?subject=Enquiry&body=Hello" class="text-light text-decoration-none">
+        {{ company.email }}
+    </a>
+</p>
+
                     <div class="d-flex pt-2">
                         {% if company.twitter %}
         <a class="btn btn-outline-light btn-social" href="{{ company.twitter }}"><i class="fab fa-twitter"></i></a>
@@ -266,22 +326,28 @@
     {% endif %}
                     </div>
                 </div>
+              <div class="col-lg-3 col-md-6">
+                   <h4 class="text-light mb-4">Quick Links</h4>
+
+                   <a class="btn btn-link" href="{% url 'about' %}">About Us</a>
+                   <a class="btn btn-link" href="{% url 'contact' %}">Contact Us</a>
+                   <a class="btn btn-link" href="{% url 'gallery' %}">Our Gallery</a>
+                   <a class="btn btn-link" href="{% url 'home' %}">Home</a>
+              </div>
+
                 <div class="col-lg-3 col-md-6">
-                    <h4 class="text-light mb-4">Services</h4>
-                    <a class="btn btn-link" href="">Air Freight</a>
-                    <a class="btn btn-link" href="">Sea Freight</a>
-                    <a class="btn btn-link" href="">Road Freight</a>
-                    <a class="btn btn-link" href="">Logistic Solutions</a>
-                    <a class="btn btn-link" href="">Industry solutions</a>
+                      <h4 class="text-light mb-4">Services</h4>
+
+                         {% for service in nav_services %}
+                            <a class="btn btn-link" href="{% url 'service_detail' service.id %}">
+                            {{ service.service_name }}
+                            </a>
+                         {% empty %}
+                            <p class="text-muted">No services available</p>
+                         {% endfor %}
                 </div>
-                <div class="col-lg-3 col-md-6">
-                    <h4 class="text-light mb-4">Quick Links</h4>
-                    <a class="btn btn-link" href="">About Us</a>
-                    <a class="btn btn-link" href="">Contact Us</a>
-                    <a class="btn btn-link" href="">Our Services</a>
-                    <a class="btn btn-link" href="">Terms & Condition</a>
-                    <a class="btn btn-link" href="">Support</a>
-                </div>
+
+
                 <!-- <div class="col-lg-3 col-md-6">
                     <h4 class="text-light mb-4">Newsletter</h4>
                     <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
@@ -299,7 +365,7 @@
                         &copy; <a class="border-bottom" href="https://Capricornshippingqatar.com">Capricornshippingqatar.com</a>, All Right Reserved.
                     </div>
                     <div class="col-md-6 text-center text-md-end">
-                        Designed By <a  style="text-decoration: none;" href="/admin/" target="_blank">Ruban</a>
+                       Designed By <a  style="text-decoration: none;" href="/admin/" target="_blank">Ruban</a>
                     </div>
                 </div>
             </div>

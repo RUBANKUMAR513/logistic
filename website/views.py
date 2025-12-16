@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from settings.models import LogoSettings,ColorSettings,CompanyDetails
-from website.models import GalleryImages,Testimonial,ContactPage,TypesOfService,TeamMember,OurFeature,AboutUs
+from website.models import GalleryImages,Testimonial,ContactPage,TypesOfService,TeamMember,OurFeature,AboutUs,NavbarPageImages,ServiceContent
 from django.shortcuts import render, get_object_or_404
 
 def get_common_context():
@@ -30,7 +30,7 @@ def about(request):
     )
     context['feature'] = OurFeature.objects.first()
     context['about'] = AboutUs.objects.first()
-
+    context['navbar_images'] = NavbarPageImages.objects.first()
     return render(request, "about.html", context)
 
 # Service page
@@ -45,6 +45,7 @@ def gallery(request):
 
     context['gallery_images'] = gallery_images
     context['testimonials'] = Testimonial.objects.filter(enable=True)
+    context['navbar_images'] = NavbarPageImages.objects.first()
     return render(request, "gallery.html", context)
 
 
@@ -78,6 +79,7 @@ def contact(request):
     context = get_common_context()
     contact = ContactPage.objects.first()
     context['contact'] = contact
+    context['navbar_images'] = NavbarPageImages.objects.first()
     return render(request, "contact.html", context)
 
 # 404 error page
@@ -86,19 +88,25 @@ def error_404(request, exception):
     return render(request, "404.html", context)
 
 def service_detail(request, service_id):
+    # Get the active service
     service = get_object_or_404(
         TypesOfService,
         id=service_id,
         is_active=True
     )
 
-  
+    # Get related ServiceContent (if exists)
+    try:
+        service_content = service.content  # OneToOne relation
+    except ServiceContent.DoesNotExist:
+        service_content = None
 
+    # Common context
     context = get_common_context()
     context['testimonials'] = Testimonial.objects.filter(enable=True)
     context.update({
         "service": service,
-       
+        "service_content": service_content,  # Pass page header image and descriptions
     })
 
     return render(request, "service-content.html", context)

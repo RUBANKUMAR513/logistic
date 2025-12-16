@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import GalleryImages,Testimonial,ContactPage,TypesOfService,ServiceContent,TeamMember,OurFeature,AboutUs
+from .models import GalleryImages,Testimonial,ContactPage,TypesOfService,ServiceContent,TeamMember,OurFeature,AboutUs,NavbarPageImages
 
 
 @admin.register(GalleryImages)
@@ -232,3 +232,24 @@ class AboutUsAdmin(admin.ModelAdmin):
     # -------------------------------
     def has_add_permission(self, request):
         return not AboutUs.objects.exists()
+    
+@admin.register(NavbarPageImages)
+class NavbarPageImagesAdmin(admin.ModelAdmin):
+
+    fieldsets = (
+        ("About Page", {
+            "fields": ("about_page_image", "about_page_description")
+        }),
+        ("Gallery Page", {
+            "fields": ("gallery_page_image", "gallery_page_description")
+        }),
+        ("Contact Page", {
+            "fields": ("contact_page_image", "contact_page_description")
+        }),
+    )
+
+    readonly_fields = ("created_at", "updated_at")
+
+    def has_add_permission(self, request):
+        # Disable add button if one instance already exists
+        return not NavbarPageImages.objects.exists()

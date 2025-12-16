@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from settings.models import LogoSettings,ColorSettings,CompanyDetails
-from website.models import GalleryImages,Testimonial,ContactPage,TypesOfService
+from website.models import GalleryImages,Testimonial,ContactPage,TypesOfService,TeamMember,OurFeature,AboutUs
 from django.shortcuts import render, get_object_or_404
 
 def get_common_context():
@@ -24,6 +24,13 @@ def home(request):
 # About page
 def about(request):
     context = get_common_context()
+
+    context['team_members'] = TeamMember.objects.filter(
+        is_active=True
+    )
+    context['feature'] = OurFeature.objects.first()
+    context['about'] = AboutUs.objects.first()
+
     return render(request, "about.html", context)
 
 # Service page

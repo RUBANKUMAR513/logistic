@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.core.validators import URLValidator
 from PIL import Image
 import os
 from io import BytesIO
@@ -151,3 +152,223 @@ class ServiceContent(models.Model):
 
     def __str__(self):
         return f"{self.service.service_name} Content"
+    
+def validate_team_image(image):
+    """
+    Validate image size to be exactly 400x400 pixels
+    """
+    img = Image.open(image)
+    width, height = img.size
+
+    if width != 400 or height != 400:
+        raise ValidationError(
+            "Image must be exactly 400 x 400 pixels."
+        )
+
+
+class TeamMember(models.Model):
+    name = models.CharField(
+        max_length=100,
+        help_text="Enter team member full name"
+    )
+
+    designation = models.CharField(
+        max_length=100,
+        help_text="Enter team member designation (e.g., Manager, Developer)"
+    )
+
+    image = models.ImageField(
+        upload_to='team/',
+        validators=[validate_team_image],
+        help_text="Upload square image (400 x 400 pixels)"
+    )
+
+    facebook = models.URLField(
+        blank=True,
+        null=True,
+        validators=[URLValidator()],
+        help_text="Facebook profile link"
+    )
+
+    twitter = models.URLField(
+        blank=True,
+        null=True,
+        validators=[URLValidator()],
+        help_text="Twitter (X) profile link"
+    )
+
+    instagram = models.URLField(
+        blank=True,
+        null=True,
+        validators=[URLValidator()],
+        help_text="Instagram profile link"
+    )
+
+    is_active = models.BooleanField(
+        default=True,
+        help_text="Uncheck to hide this member from website"
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        help_text="Last updated time"
+    )
+
+    class Meta:
+        verbose_name = "Team Member"
+        verbose_name_plural = "Team Members"
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+    
+# -------------------------------
+# Image size validation (800x800)
+# -------------------------------
+def validate_800x800(image):
+    img = Image.open(image)
+    if img.width != 800 or img.height != 800:
+        raise ValidationError("Image must be exactly 800 x 800 pixels.")
+
+
+class OurFeature(models.Model):
+    heading_quote = models.CharField(
+        max_length=200,
+        help_text="Main heading or quote"
+    )
+
+    image = models.ImageField(
+        upload_to="features/",
+        validators=[validate_800x800],
+        help_text="Upload image with size 800 x 800 pixels"
+    )
+
+    # -------- Feature 1 --------
+    sub_title1 = models.CharField(
+        max_length=100,
+        unique=True,
+        help_text="Unique subtitle 1"
+    )
+    icon1 = models.CharField(
+        max_length=30,
+        help_text="Font Awesome icon name only (example: truck, clock, shield)"
+    )
+    short_description1 = models.CharField(
+        max_length=150,
+        help_text="Short description 1"
+    )
+
+    # -------- Feature 2 --------
+    sub_title2 = models.CharField(
+        max_length=100,
+        unique=True,
+        help_text="Unique subtitle 2"
+    )
+    icon2 = models.CharField(
+        max_length=30,
+        help_text="Font Awesome icon name only"
+    )
+    short_description2 = models.CharField(
+        max_length=150,
+        help_text="Short description 2"
+    )
+
+    # -------- Feature 3 --------
+    sub_title3 = models.CharField(
+        max_length=100,
+        unique=True,
+        help_text="Unique subtitle 3"
+    )
+    icon3 = models.CharField(
+        max_length=30,
+        help_text="Font Awesome icon name only"
+    )
+    short_description3 = models.CharField(
+        max_length=150,
+        help_text="Short description 3"
+    )
+
+    last_updated = models.DateTimeField(auto_now=True)
+
+    def clean(self):
+        if not self.pk and OurFeature.objects.exists():
+            raise ValidationError("Only one OurFeature instance is allowed.")
+
+    def save(self, *args, **kwargs):
+        self.full_clean()  # ensures clean() runs always
+        super().save(*args, **kwargs)
+
+
+    def __str__(self):
+        return self.heading_quote
+    
+
+class AboutUs(models.Model):
+    heading_quote = models.CharField(
+        max_length=200,
+        help_text="Main heading or quote"
+    )
+
+    # Short description at the end (STRICT 30 chars)
+    short_description = models.CharField(
+        max_length=150,
+        help_text="Short description about the company (shown at the end)"
+    )
+
+    image = models.ImageField(
+        upload_to="about/",
+        validators=[validate_800x800],
+        help_text="Upload image with size 800 x 800 pixels"
+    )
+
+    # -------- Feature 1 --------
+    sub_title1 = models.CharField(
+        max_length=100,
+        unique=True,
+        help_text="Unique subtitle 1"
+    )
+    icon1 = models.CharField(
+        max_length=30,
+        help_text="Font Awesome icon name only (example: truck, clock)"
+    )
+    short_description1 = models.CharField(
+        max_length=150,
+        help_text="Short description 1"
+    )
+
+    # -------- Feature 2 --------
+    sub_title2 = models.CharField(
+        max_length=100,
+        unique=True,
+        help_text="Unique subtitle 2"
+    )
+    icon2 = models.CharField(
+        max_length=30,
+        help_text="Font Awesome icon name only"
+    )
+    short_description2 = models.CharField(
+        max_length=150,
+        help_text="Short description 2"
+    )
+
+    # Detailed About Content
+    detail_content = models.TextField(
+        help_text="Detailed content for About Us section"
+    )
+
+    last_updated = models.DateTimeField(auto_now=True)
+
+    # -------------------------------
+    # Allow ONLY ONE instance
+    # -------------------------------
+    def clean(self):
+        if not self.pk and AboutUs.objects.exists():
+            raise ValidationError("Only one AboutUs instance is allowed.")
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return "About Us Section"

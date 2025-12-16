@@ -194,8 +194,8 @@
                     </a>
                 </li>
                 <li class="breadcrumb-item">
-                    <a class="text-white" href="#">
-                        Pages
+                    <a class="text-white" href="{% url 'contact' %}">
+                        Contact
                     </a>
                 </li>
                 <li class="breadcrumb-item text-white active" aria-current="page">
@@ -287,12 +287,12 @@
         </div>
     </div> -->
     <!-- Service End -->
-       <div class="text-center">
+       <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
        <h6 class="text-secondary text-uppercase">Gallery</h6>
         <h1 class="mb-0">Our works!</h1>
         </div>
         {% load static %}
-        <div class="gallery">
+        <div class="gallery wow fadeInUp" data-wow-delay="0.3s">
             {% if gallery_images.exists %}  <!-- Check if any images exist -->
                 {% for image in gallery_images %}
                     <div class="image-container {% if image.orientation == 'portrait' %}tall{% endif %}">

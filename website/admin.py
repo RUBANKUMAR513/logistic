@@ -215,9 +215,9 @@ class AboutUsAdmin(admin.ModelAdmin):
                 'short_description2',
             )
         }),
-        ("Detail Content", {
+        ("why_choose_us", {
             'fields': (
-                'detail_content',
+                'why_choose_us',
             )
         }),
         ("Last Updated", {
@@ -245,6 +245,9 @@ class NavbarPageImagesAdmin(admin.ModelAdmin):
         }),
         ("Contact Page", {
             "fields": ("contact_page_image", "contact_page_description")
+        }),
+        ("Why Choose Us", {
+            "fields": ("why_choose_us_image", "why_choose_us_description")
         }),
     )
 

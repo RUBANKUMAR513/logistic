@@ -33,6 +33,14 @@ def about(request):
     context['navbar_images'] = NavbarPageImages.objects.first()
     return render(request, "about.html", context)
 
+
+def about_detail(request):
+    context = get_common_context()  
+    context['about'] = AboutUs.objects.first()
+    context['testimonials'] = Testimonial.objects.filter(enable=True)
+    context['navbar_images'] = NavbarPageImages.objects.first()
+    return render(request, "about-detail.html", context)
+
 # Service page
 def service(request):
     context = get_common_context()

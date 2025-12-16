@@ -370,7 +370,7 @@ class AboutUs(models.Model):
     )
 
     # Detailed About Content
-    detail_content = models.TextField(
+    why_choose_us = models.TextField(
         help_text="Detailed content for About Us section"
     )
 
@@ -442,6 +442,19 @@ class NavbarPageImages(models.Model):
         null=True,
         blank=True,
         help_text="Optional description for Contact page banner"
+    )
+
+    why_choose_us_image = models.ImageField(
+        upload_to='navbar/',
+        validators=[validate_1920_1080],
+        help_text="Upload 'Why Choose Us' section image (Exact size: 1920 x 1080)",
+        null=True,
+        blank=True
+    )
+    why_choose_us_description = models.TextField(
+        null=True,
+        blank=True,
+        help_text="Optional description for 'Why Choose Us' section"
     )
 
     created_at = models.DateTimeField(auto_now_add=True)

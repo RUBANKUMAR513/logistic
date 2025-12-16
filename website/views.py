@@ -19,6 +19,10 @@ def get_common_context():
 # Home page
 def home(request):
     context = get_common_context()
+    context['testimonials'] = Testimonial.objects.filter(enable=True)
+    context['team_members'] = TeamMember.objects.filter(
+        is_active=True
+    )
     return render(request, "index.html", context)
 
 # About page

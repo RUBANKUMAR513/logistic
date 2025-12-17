@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import GalleryImages,Testimonial,ContactPage,TypesOfService,ServiceContent,TeamMember,OurFeature,AboutUs,NavbarPageImages
+from .models import GalleryImages,Testimonial,ContactPage,TypesOfService,ServiceContent,TeamMember,OurFeature,AboutUs,NavbarPageImages,HomePageSlider
 
 
 @admin.register(GalleryImages)
@@ -256,3 +256,26 @@ class NavbarPageImagesAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         # Disable add button if one instance already exists
         return not NavbarPageImages.objects.exists()
+    
+@admin.register(HomePageSlider)
+class HomePageSliderAdmin(admin.ModelAdmin):
+    list_display = (
+        'title',
+        'highlight_word',
+        'is_active',
+        'created_at',
+    )
+
+    list_filter = ('is_active',)
+    search_fields = ('title', 'quote_before','quote_after', 'highlight_word')
+    ordering = ('-created_at',)
+
+    fields = (
+        'title',
+        'description',
+        'quote_before',
+        'quote_after',
+        'highlight_word',
+        'image',
+        'is_active',
+    )

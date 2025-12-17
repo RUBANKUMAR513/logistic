@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from settings.models import LogoSettings,ColorSettings,CompanyDetails
-from website.models import GalleryImages,Testimonial,ContactPage,TypesOfService,TeamMember,OurFeature,AboutUs,NavbarPageImages,ServiceContent
+from website.models import GalleryImages,Testimonial,ContactPage,TypesOfService,TeamMember,OurFeature,AboutUs,NavbarPageImages,ServiceContent,HomePageSlider
 from django.shortcuts import render, get_object_or_404
 
 def get_common_context():
@@ -23,10 +23,12 @@ def home(request):
     context['team_members'] = TeamMember.objects.filter(
         is_active=True
     )
+    context['feature'] = OurFeature.objects.first()
+    context['sliders'] = HomePageSlider.objects.filter(is_active=True)
     context['services'] = TypesOfService.objects.filter(is_active=True)
     contact = ContactPage.objects.first()
     context['contact'] = contact
-    
+    context['about'] = AboutUs.objects.first()
     return render(request, "index.html", context)
 
 # About page

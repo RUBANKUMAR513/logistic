@@ -125,7 +125,7 @@ content="Fast and reliable All types of freight services in India. Capricon Logi
 
     <!-- About Start -->
     <div class="container-fluid overflow-hidden py-5 px-lg-0">
-        <div class="container about py-5 px-lg-0">
+        <div class="container about py-5 px-lg-0"> 
             <div class="row g-5 mx-lg-0">
                 {% if about %}
                 <div class="col-lg-6 ps-lg-0 wow fadeInLeft" data-wow-delay="0.1s" style="min-height: 400px;">
@@ -209,7 +209,7 @@ content="Fast and reliable All types of freight services in India. Capricon Logi
         <div class="container feature py-5 px-lg-0">
             <div class="row g-5 mx-lg-0">
                 <div class="col-lg-6 feature-text wow fadeInUp" data-wow-delay="0.1s">
-                    <h6 class="text-secondary text-uppercase mb-3">Our Features</h6>
+                    <h6 class="text-secondary text-uppercase mb-3" id="feature">Our Features</h6>
                     <h1 class="mb-5">{{ feature.heading_quote }}</h1>
                     <div class="d-flex mb-5 wow fadeInUp" data-wow-delay="0.3s">
                         <i class="fa fa-{{ feature.icon1 }} text-primary fa-3x flex-shrink-0"></i>
@@ -247,7 +247,7 @@ content="Fast and reliable All types of freight services in India. Capricon Logi
     <div class="container-xxl py-5">
         <div class="container py-5">
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                <h6 class="text-secondary text-uppercase">Our Team</h6>
+                <h6 class="text-secondary text-uppercase" id="team">Our Team</h6>
                 <h1 class="mb-5">Expert Team Members</h1>
             </div>
             <div class="row g-4">
@@ -347,7 +347,9 @@ content="Fast and reliable All types of freight services in India. Capricon Logi
                 </div>
               <div class="col-lg-3 col-md-6">
                    <h4 class="text-light mb-4">Quick Links</h4>
-
+                   <a class="btn btn-link" href="#feature">Our Features</a>
+                   <a class="btn btn-link" href="#team">Our Team</a>
+                   <a class="btn btn-link" href="{% url 'home' %}#testimonial">Testimonial</a>
                    <a class="btn btn-link" href="{% url 'about' %}">About Us</a>
                    <a class="btn btn-link" href="{% url 'contact' %}">Contact Us</a>
                    <a class="btn btn-link" href="{% url 'gallery' %}">Our Gallery</a>

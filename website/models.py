@@ -7,6 +7,59 @@ from io import BytesIO
 from django.core.files.base import ContentFile
 import re
 
+def validate_1920x1080(image):
+    img = Image.open(image)
+    width, height = img.size
+    if width != 1920 or height != 1080:
+        raise ValidationError("Image must be exactly 1920 x 1080 pixels.")
+    
+class HomePageSlider(models.Model):
+    title = models.CharField(
+        max_length=30,
+        help_text="Enter slider title"
+    )
+
+    description = models.TextField(
+        help_text="Short description for the slider",
+        max_length=200
+    )
+
+    quote_before = models.CharField(
+        max_length=20,
+        help_text="Quote text shown on slider"
+    )
+    
+    highlight_word = models.CharField(
+        max_length=10,
+        help_text="Word to highlight inside the quote"
+    )
+
+    quote_after = models.CharField(
+        max_length=10,
+        help_text="Quote text shown on slider",
+        default="& Solution"
+    )
+
+    image = models.ImageField(
+        upload_to='sliders/',
+        validators=[validate_1920x1080],
+        help_text="Upload image (Exact size: 1920 x 1080 px)"
+    )
+
+    is_active = models.BooleanField(
+        default=True,
+        help_text="Enable or disable this slider"
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.title
+
 class GalleryImages(models.Model):
     ORIENTATION_CHOICES = [
         ('portrait', 'Portrait'),

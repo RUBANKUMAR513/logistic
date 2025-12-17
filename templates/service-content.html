@@ -261,7 +261,7 @@ content="Fast and reliable All types of freight services in India. Capricon Logi
     <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
         <div class="container py-5">
             <div class="text-center">
-                <h6 class="text-secondary text-uppercase">Testimonial</h6>
+                <h6 class="text-secondary text-uppercase" id="testimonial">Testimonial</h6>
                 <h1 class="mb-0">Our Clients Say!</h1>
             </div>
             <div class="owl-carousel testimonial-carousel wow fadeInUp" data-wow-delay="0.1s">
@@ -338,7 +338,9 @@ content="Fast and reliable All types of freight services in India. Capricon Logi
                 </div>
               <div class="col-lg-3 col-md-6">
                    <h4 class="text-light mb-4">Quick Links</h4>
-
+                   <a class="btn btn-link" href="{% url 'about' %}#feature">Our Features</a>
+                   <a class="btn btn-link" href="{% url 'about' %}#team">Our Team</a>
+                   <a class="btn btn-link" href="#testimonial">Testimonial</a>
                    <a class="btn btn-link" href="{% url 'about' %}">About Us</a>
                    <a class="btn btn-link" href="{% url 'contact' %}">Contact Us</a>
                    <a class="btn btn-link" href="{% url 'gallery' %}">Our Gallery</a>

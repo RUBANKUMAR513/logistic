@@ -16,6 +16,12 @@ def validate_logo_dimensions(file):
     width, height = img.size
     if width != 1215 or height != 665:
         raise ValidationError(f"Logo must be 1215x665 pixels. Uploaded image is {width}x{height} pixels.")
+    
+def validate_title_logo_dimensions(image):
+    img = Image.open(image)
+    width, height = img.size
+    if width != 32 or height != 32:
+        raise ValidationError("Title logo must be exactly 32 x 32 pixels.")
 
 class LogoSettings(models.Model):
     company_name = models.CharField(
@@ -28,6 +34,14 @@ class LogoSettings(models.Model):
         upload_to='logos/',
         validators=[validate_png, validate_logo_dimensions],  # Added dimension validator
         help_text="Upload your logo (PNG only, 1215x665 pixels)"
+    )
+    
+    title_logo = models.ImageField(
+        upload_to='logos/title/',
+        validators=[validate_png, validate_title_logo_dimensions],
+        help_text="Upload title logo (PNG only, 32 x 32 px)",
+        null=True,
+        blank=True
     )
 
     last_updated = models.DateTimeField(auto_now=True)

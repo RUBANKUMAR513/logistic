@@ -108,6 +108,13 @@ class ContactPage(models.Model):
     def __str__(self):
         return "Contact Page Content"
     
+def validate_image_500x300(image):
+    img = Image.open(image)
+    width, height = img.size
+    if width != 500 or height != 300:
+        raise ValidationError(
+            "Image must be exactly 500 x 300 pixels."
+        )
 
 class TypesOfService(models.Model):
     service_name = models.CharField(
@@ -115,6 +122,14 @@ class TypesOfService(models.Model):
         unique=True,
         help_text="Enter service name"
     )
+
+    image = models.ImageField(
+        upload_to='services/',
+        validators=[validate_image_500x300],
+        default='services/default.png',
+        help_text="Upload image with exact size 500 x 300 px"
+    )
+
     description = models.TextField(
         max_length=100,
         
@@ -129,7 +144,7 @@ class TypesOfService(models.Model):
 
     def __str__(self):
         return self.service_name
-    
+
 def validate_1920_1080(image):
     img = Image.open(image)
     width, height = img.size

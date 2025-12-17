@@ -5,6 +5,14 @@
 <head>
     <meta charset="utf-8">
     <title>{{ logo_settings.company_name|default:"Capricon" }}- About</title>
+    <link rel="icon"
+      href="{% if logo_settings.title_logo %}
+            {{ logo_settings.title_logo.url }}
+            {% else %}
+            {% static 'img/favicon.png' %}
+            {% endif %}">
+    <meta name="description"
+content="Fast and reliable All types of freight services in India. Capricon Logistics ensures safe, on-time cargo delivery worldwide.">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">

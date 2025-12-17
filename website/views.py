@@ -23,6 +23,10 @@ def home(request):
     context['team_members'] = TeamMember.objects.filter(
         is_active=True
     )
+    context['services'] = TypesOfService.objects.filter(is_active=True)
+    contact = ContactPage.objects.first()
+    context['contact'] = contact
+    
     return render(request, "index.html", context)
 
 # About page
@@ -92,6 +96,7 @@ def contact(request):
     contact = ContactPage.objects.first()
     context['contact'] = contact
     context['navbar_images'] = NavbarPageImages.objects.first()
+    context['services'] = TypesOfService.objects.filter(is_active=True)
     return render(request, "contact.html", context)
 
 # 404 error page

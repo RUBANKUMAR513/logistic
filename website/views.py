@@ -102,9 +102,10 @@ def contact(request):
     return render(request, "contact.html", context)
 
 # 404 error page
-def error_404(request, exception):
+def error_404(request,exception):
+    print("hi this from 404")
     context = get_common_context()
-    return render(request, "404.html", context)
+    return render(request, "404.html", context,status=404)
 
 def service_detail(request, service_id):
     # Get the active service

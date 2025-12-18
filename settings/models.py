@@ -43,6 +43,7 @@ class LogoSettings(models.Model):
         null=True,
         blank=True
     )
+    
 
     last_updated = models.DateTimeField(auto_now=True)
 
@@ -135,3 +136,5 @@ class ColorSettings(models.Model):
         if not self.pk and ColorSettings.objects.exists():
             raise ValidationError("Only one ColorSettings instance is allowed.")
         return super().save(*args, **kwargs)
+    
+

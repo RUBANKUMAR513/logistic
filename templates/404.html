@@ -4,7 +4,15 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Logistica - Shipping Company Website Template</title>
+     <title>{{ logo_settings.company_name|default:"Capricon" }} - Home</title>
+    <link rel="icon"
+      href="{% if logo_settings.title_logo %}
+            {{ logo_settings.title_logo.url }}
+            {% else %}
+            {% static 'img/favicon.png' %}
+            {% endif %}">
+    <meta name="description"
+content="Fast and reliable All types of freight services in India. Capricon Logistics ensures safe, on-time cargo delivery worldwide.">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -30,6 +38,11 @@
 
     <!-- Template Stylesheet -->
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <style>
+        .bg-primary {
+    background-color: #ffffff !important;
+}
+    </style>
 </head>
 
 <body>
@@ -42,32 +55,48 @@
     <!-- Spinner End -->
 
     <!-- Navbar Start -->
-    <nav class="navbar navbar-expand-lg bg-white navbar-light shadow border-top border-5 border-primary sticky-top p-0">
-        <a href="home" class="navbar-brand bg-primary d-flex align-items-center px-4 px-lg-5">
-            <h2 class="mb-2 text-white">Logistica</h2>
+        <nav class="navbar navbar-expand-lg bg-white navbar-light shadow border-top border-5 border-primary sticky-top p-0">
+        <a href="/" class="navbar-brand bg-primary d-flex align-items-center px-4 px-lg-5">
+    {% if logo_settings and logo_settings.logo %}
+        <img src="{{ logo_settings.logo.url }}" alt="" style="height:70px;">
+    {% else %}
+        <h2 class="mb-2 text-white">{{ logo_settings.company_name|default:"Capricon" }}</h2>
+    {% endif %}
         </a>
+
         <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
-                <a href="home" class="nav-item nav-link">Home</a>
-                <a href="about" class="nav-item nav-link">About</a>
-                <a href="services" class="nav-item nav-link">Services</a>
+                <a href="{% url 'home' %}" class="nav-item nav-link {% if request.path == '/' %}active{% endif %}">Home</a>
+                <a href="{% url 'about' %}" class="nav-item nav-link {% if request.path == '/about/' %}active{% endif %}">About</a>
+                <a href="{% url 'gallery' %}" class="nav-item nav-link {% if request.path == '/gallery/' %}active{% endif %}">Gallery</a>
+
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown">Pages</a>
-                    <div class="dropdown-menu fade-up m-0">
-                        <a href="pricing" class="dropdown-item">Pricing Plan</a>
-                        <a href="features" class="dropdown-item">Features</a>
-                        <a href="quote" class="dropdown-item">Free Quote</a>
-                        <a href="team" class="dropdown-item">Our Team</a>
-                        <a href="testimonial" class="dropdown-item">Testimonial</a>
-                        <a href="404" class="dropdown-item active">404 Page</a>
-                    </div>
-                </div>
-                <a href="contact" class="nav-item nav-link">Contact</a>
+    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+        Services
+    </a>
+
+<div class="dropdown-menu fade-up m-0">
+        {% for service in nav_services %}
+            <a href="{% url 'service_detail' service.id %}" class="dropdown-item">
+                {{ service.service_name }}
+            </a>
+        {% empty %}
+            <span class="dropdown-item text-muted">
+                No services available
+            </span>
+        {% endfor %}
+    </div>
+</div>
+                <a href="{% url 'contact' %}" class="nav-item nav-link {% if request.path == '/contact/' %}active{% endif %}">contact</a>
             </div>
-            <h4 class="m-0 pe-lg-5 d-none d-lg-block"><i class="fa fa-headphones text-primary me-3"></i>+012 345 6789</h4>
+            <h4 class="m-0 pe-lg-5 d-none d-lg-block">
+    <i class="fa fa-headphones text-primary me-3"></i>
+    {{ company.contact_number }}
+</h4>
+
         </div>
     </nav>
     <!-- Navbar End -->
@@ -96,7 +125,7 @@
                     <h1 class="display-1">404</h1>
                     <h1 class="mb-4">Page Not Found</h1>
                     <p class="mb-4">We’re sorry, the page you have looked for does not exist in our website! Maybe go to our home page or try to use a search?</p>
-                    <a class="btn btn-primary rounded-pill py-3 px-5" href="home">Go Back To Home</a>
+                    <a class="btn btn-primary rounded-pill py-3 px-5" href="{% url 'home' %}">Go Back To Home</a>
                 </div>
             </div>
         </div>

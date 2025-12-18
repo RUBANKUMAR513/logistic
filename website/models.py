@@ -511,6 +511,18 @@ class NavbarPageImages(models.Model):
         blank=True,
         help_text="Optional description for Contact page banner"
     )
+    error_page_image = models.ImageField(
+        upload_to='navbar/',
+        validators=[validate_1920_1080],
+        help_text="Upload error page banner image (Exact size: 1920 x 1080)",
+        null=True,
+        blank=True
+    )
+    error_page_description = models.TextField(
+        null=True,
+        blank=True,
+        help_text="Optional description for error page banner"
+    )
 
     why_choose_us_image = models.ImageField(
         upload_to='navbar/',

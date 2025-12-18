@@ -246,6 +246,9 @@ class NavbarPageImagesAdmin(admin.ModelAdmin):
         ("Contact Page", {
             "fields": ("contact_page_image", "contact_page_description")
         }),
+        ("error Page", {
+            "fields": ("error_page_image", "error_page_description")
+        }),
         ("Why Choose Us", {
             "fields": ("why_choose_us_image", "why_choose_us_description")
         }),

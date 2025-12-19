@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-rol-(%)u6&u2ge*hs33$d!lum$+4srm&o%-+qlt2nvb_n0!-k0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'capricornshippingqatar.com',
@@ -39,7 +39,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
-    "jazzmin",
+   "jazzmin",
     'colorfield',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -75,6 +75,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'settings.context_processors.admin_branding',
             ],
         },
     },
@@ -144,13 +145,26 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 
-JAZZMIN_SETTINGS = {
-    "site_title": "Logistic Admin",
-    "site_header": "Logistic Management",
-    "site_brand": "Logistic Dashboard",
-    "welcome_sign": "Welcome to Logistic Admin Panel",
-    "copyright": "Logistic © 2025",
+# settings.py
 
-    "show_ui_builder": True,  # UI Theme Customize Option
+# Jazzmin settings
+JAZZMIN_SETTINGS = {
+    "site_title": "CapriconShipping Admin",  # Title on browser tab
+    "site_header": "CapriconShipping",       # Header in admin
+    "site_brand": "CapriconShipping",        # Brand text in top-left
+    "site_logo": "logos/seo title png.png",  # Path to your logo (inside static folder)
+    "login_logo": "logos/logo128.png",   # Logo on login page
+    "login_logo_dark": None,         # Optional dark logo
+    "site_icon": "logos/seo title png.png",       # Favicon
+    "welcome_sign": "Welcome to Capricon Admin",
+    "copyright": "Capricon © 2025",
+    "search_model": "auth.User",     # Model to search in admin search bar
+    "user_avatar": None,             # Optional user avatar
+
+    # UI tweaks
+    "show_ui_builder": True,         # Show UI customization panel
+    "changeform_format": "horizontal_tabs",  # Form layout style
 }
-JAZZMIN_SETTINGS["theme"] = "lux"   # Example Theme
+
+
+

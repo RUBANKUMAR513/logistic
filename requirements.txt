@@ -46,7 +46,6 @@ psycopg2-binary==2.9.10
 PyJWT==2.9.0
 python-crontab==3.2.0
 python-dateutil==2.9.0.post0
-pywin32==308
 PyYAML==6.0.2
 redis==5.2.0
 reportlab==4.4.6
